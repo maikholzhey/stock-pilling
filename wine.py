@@ -35,7 +35,8 @@ def p(key,delta):
 	global a
 	dtime = datetime.now()
 	dtime = dtime - timedelta(hours = dtime.hour)
-	a[key] = dtime + timedelta(days=delta)
+	dtime = dtime.replace(year=dtime.year + delta)
+	a[key] = dtime
 	
 def pp(key):
 	global a 
@@ -127,8 +128,9 @@ def generate_html_with_table(data, columns_or_rows = 1, \
 ##########################################
 
 # dict a
+#a = dict()
 # load from file
-file = open('db.txt','r')
+file = open('winedb.txt','r')
 a = pickle.load(file)
 file.close()
 
@@ -160,7 +162,7 @@ def output():
 	# Generate HTML
 	data_html1, data_df1 = generate_html_with_table(data, columns_or_rows, column_name_prefix, span_axis, showOutput)
 
-	content ="<h1>Stockpiling</h1>"+ data_html1 + u"<p> date of today is " + str("{:%B %d, %Y}".format(datetime.now())) +"</p>"
+	content ="<h1>Wine cellar list</h1>"+ data_html1 + u"<p> date of today is " + str("{:%B %d, %Y}".format(datetime.now())) +"</p>"
 	
 	#redmarker = u"<font color="+u"red"+"><b>!-</b></font>"
 	contentr = content.replace(u"&lt;",u"<")
@@ -168,13 +170,13 @@ def output():
 	contentr = contentr.replace(u"<...",u"")
 
 	# save data html to file
-	Html_file= open("piling.html","w")
+	Html_file= open("wine.html","w")
 	Html_file.write(contentr)
 	Html_file.close()
 
 	# save data to pickle dump
 	# dump to file
-	file = open('db.txt','w')
+	file = open('winedb.txt','w')
 	pickle.dump(a, file)
 	file.close()
 	
@@ -182,11 +184,12 @@ def output():
 ### CHANGE ##########################################
 #####################################################
 
-insert = []#['cheese','bread','coffee','milk','haribo']
-tim = []#[4,3,100,1,30]
+insert =[]# ['Primitivo','Chianti','Merlot','Sauvignanc Blanc','Silvaner']
+
+tim = []# [4,8,7,2,2]
 for i in range(len(insert)):
 	p(insert[i],tim[i])
-	#pp('haribo')
+	#pp(opp[i])
 
 #####################################################
 output()
